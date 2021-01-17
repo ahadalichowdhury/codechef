@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+int bs(int a[], int left, int right, int key)
+{
+	int mid;
+	mid=(left+right)/2;
+	if(a[mid]==key)
+	{
+		return mid;
+	}
+	else if(left<right)
+	{
+		if(key<a[mid])
+		{
+			return bs(a, left, mid-1,key);
+		}
+		else
+		{
+			return bs(a,mid+1,right, key);
+		}
+	}
+	return -1;
+}
+
+int main()
+{
+	int a[7]={5, 10, 15, 20, 25, 30, 100};
+	int key=100;
+	int result=0;
+	result=bs(a, 0, 6, key);
+	
+	if(result==-1) 
+	{
+		cout<< "this is not fouund" <<endl;
+	}
+	else
+	{
+		cout<< "element found at "<< result << endl;
+	}
+	
+	
+	return 0;
+}
