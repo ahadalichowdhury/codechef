@@ -1,22 +1,22 @@
 #include<bits/stdc++.h>
 using namespace std;
-int bs(int a[], int left, int right, int key)
+int bs(int B[], int left, int right, int key)
 {
 	int mid;
 	mid=(left+right)/2;
-	if(a[mid]==key)
+	if(B[mid]==key)
 	{
 		return mid;
 	}
 	else if(left<right)
 	{
-		if(key<a[mid])
+		if(key<B[mid])
 		{
-			return bs(a, left, mid-1,key);
+			return bs(B, left, mid-1,key);
 		}
 		else
 		{
-			return bs(a,mid+1,right, key);
+			return bs(B,mid+1,right, key);
 		}
 	}
 	return -1;
@@ -24,10 +24,10 @@ int bs(int a[], int left, int right, int key)
 
 int main()
 {
-	int a[7]={5, 10, 15, 20, 25, 30, 100};
-	int key=100;
+	int B[8]={41,55,58,78,87,89,93,99};
+	int key=89;
 	int result=0;
-	result=bs(a, 0, 6, key);
+	result=bs(B, 0, 7, key);
 	
 	if(result==-1) 
 	{
