@@ -1,58 +1,70 @@
-#include<bits/stdc++.h>
+
+#include<iostream>
 using namespace std;
+
 struct node
 {
 	int data;
-	struct node* link;
 	struct node* prev;
+	struct node* next;
 };
-struct node* head,*tail;
-void inssertbeg(int value)
+struct node* head;
+struct node* tail;
+
+void display()
 {
-	struct node* newnode;
-	newnode=(struct node*) malloc(sizeof(struct node));
-	newnode->data=value;
-	newnode->prev=NULL;
-	newnode->link=NULL;
-	if(head==NULL)
+	struct node* temp;
+	temp=head;
+	while(temp!=NULL)
 	{
-		head=newnode;
-		
-	}
-	else
-	{
-		newnode->link=head;
-		head->prev=newnode;
-		head=newnode;
+		cout<< temp->data<< endl;
+		temp=temp->next;
 	}
 }
 void insert(int data)
 {
+	
+	
 	struct node* newnode;
-	newnode=(struct node*)malloc(sizeof(struct node));
+	newnode=(struct node*) malloc(sizeof(struct node));
 	newnode->data=data;
 	newnode->prev=NULL;
-	newnode->link=NULL;
+	newnode->next=NULL;
 	if(head==NULL)
 	{
 		head=tail=newnode;
 	}
 	else
 	{
-		tail->link=newnode;
+		tail->next=newnode;
 		newnode->prev=tail;
 		tail=newnode;
 	}
 }
-int print()
+
+int length()
 {
-    struct node * temp;
-    temp= head;
-    while(temp!= NULL)
-    {
-        cout<< temp->data << endl;
-           temp=temp-> link;
-    }
+	struct node* temp;
+	int count=0;
+	temp=head;
+	while(temp!=NULL)
+	{
+		count++;
+		temp=temp->next;
+	}
+	return count;
+}
+
+void insertbeg(int data)
+{
+	struct node* newnode;
+	newnode=(struct node*) malloc(sizeof(struct node));
+	newnode->data=data;
+	newnode->prev=NULL;
+	newnode->next=NULL;
+	head->prev=newnode;
+	newnode->next=head;
+	head=newnode;
 }
 
 void insertend(int data)
@@ -60,39 +72,69 @@ void insertend(int data)
 	struct node* newnode;
 	newnode=(struct node*)malloc(sizeof(struct node));
 	newnode->data=data;
-	newnode->link=NULL;
 	newnode->prev=NULL;
-	tail->link=newnode;
-	newnode->prev= tail;
+	newnode->next=NULL;
+	tail->next=newnode;
+	newnode->prev=tail;
 	tail=newnode;
 }
-void insertatposition(int position, int data)
+
+void insertinpos(int pos, int data)
 {
 	int i=1;
-	
-	if(position==1)
+	if(pos<1 || pos> length())
 	{
-		
-		
+		cout<< " this is invalid"<< endl;
+	}
+	else if(pos==1)
+	{
+		insertbeg(data);
 	}
 	else
 	{
-	struct node* newnode, *temp;
-	temp=head;
-	newnode=(struct node*) malloc (sizeof(struct node));
-	newnode->data=data;
-	while(i<position-1)
-	{
-		temp=temp->link;
-		i++;
-	}
-	newnode->prev=temp;
-	newnode->link=temp->link;
-	temp->link=newnode;
-	newnode->link->prev=newnode;
-		
+		struct node* newnode;
+		struct node* temp;
+		temp=head;
+		newnode=(struct node*) malloc(sizeof(struct node));
+		newnode->data=data;
+		while(i<pos-1)
+		{
+			temp=temp->next;
+			i++;
+		}
+		newnode->prev=temp;
+		newnode->next=temp->next;
+		temp->next=newnode;
+		newnode->next->prev=newnode;
 	}
 }
+void insertafterpos(int pos, int data)
+{
+	int i=1;
+	if(pos<1 || pos>length())
+	{
+		cout<< " this is invalid" << endl;
+	}
+	else
+	{
+		struct node* newnode;
+		struct node* temp;
+		newnode=(struct node*) malloc(sizeof(struct node));
+		
+		temp=head;
+		newnode->data=data;
+		while(i< pos)
+		{
+			temp=temp->next;
+			i++;
+		}
+		newnode->prev=temp;
+		newnode->next=temp->next;
+		temp->next=newnode;
+		newnode->next->prev=newnode;
+	}
+}
+
 void deletebeg()
 {
 	struct node* temp;
@@ -103,7 +145,7 @@ void deletebeg()
 	else
 	{
 		temp=head;
-		head=head->link;
+		head=head->next;
 		head->prev=NULL;
 		free(temp);
 	}
@@ -117,7 +159,7 @@ void deleteend()
 	}
 	temp=tail;
 	tail=tail->prev;
-	tail->prev->link=NULL;
+	tail->prev->next=NULL;
 	free(temp);
 }
 
@@ -128,11 +170,11 @@ void deletefromposition(int position)
 	temp=head;
 	while(i<position)
 	{
-		temp=temp->link;
+		temp=temp->next;
 		i++;
 	}
-	temp->prev->link=temp->link;
-	temp->link->prev=temp->prev;
+	temp->prev->next=temp->next;
+	temp->next->prev=temp->prev;
 	free(temp);
 }
 void reverse()
@@ -141,8 +183,8 @@ void reverse()
 	current=head;
 	while(current !=NULL)
 	{
-		nextnode=current->link;
-		current->link=current->prev;
+		nextnode=current->next;
+		current->next=current->prev;
 		current->prev=nextnode;
 		current=nextnode;
 	}
@@ -152,27 +194,20 @@ void reverse()
 	
 }
 
+
 int main()
 {
-	head=NULL;
-	tail=NULL;
-	insert(30);
+	insert(50);
 	insert(40);
-	print();
-	beg(5);
-	print();
-	insertend(50);
-	print();
-	insertatposition(3,100);
-	print();
-	deletebeg();
-	print();
-	deleteend();
-	print();
-	deletefromposition(3);
-	print();
-	//reverse();
-	//print();
+	insert(20);
+	insert(80);
+	insert(90);
+	insertbeg(100);
+	insertend(500);
+	insertinpos(3,1000);
+	insertafterpos(3,5000);
+	display();
+	
 	
 	return 0;
 }
